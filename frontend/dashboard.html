@@ -1,0 +1,226 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>FINBOT - Dashboard</title>
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+    <style>
+        body {
+            background: linear-gradient(135deg, #0062cc, #0096ff);
+            min-height: 100vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            position: relative;
+        }
+
+        .dashboard-container {
+            max-width: 900px;
+            width: 100%;
+            padding: 20px;
+        }
+
+        .header {
+            text-align: center;
+            color: white;
+            margin-bottom: 30px;
+        }
+
+        .header h1 {
+            font-size: 2.5rem;
+        }
+
+        .header p {
+            font-size: 1.1rem;
+            opacity: 0.9;
+        }
+
+        .card-row {
+            display: flex;
+            justify-content: center;
+            flex-wrap: wrap;
+            gap: 30px;
+        }
+
+        .card-option {
+            background: white;
+            border-radius: 15px;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.15);
+            width: 100%;
+            max-width: 400px;
+            transition: transform 0.3s, box-shadow 0.3s;
+            overflow: hidden;
+            cursor: pointer;
+        }
+
+        .card-option:hover {
+            transform: translateY(-10px);
+            box-shadow: 0 15px 35px rgba(0, 0, 0, 0.2);
+        }
+
+        .card-header {
+            height: 150px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .stock-header {
+            background: linear-gradient(135deg, #00c851, #00695c);
+        }
+
+        .chat-header {
+            background: linear-gradient(135deg, #ff4444, #cc0000);
+        }
+
+        .card-icon {
+            font-size: 70px;
+            color: white;
+        }
+
+        .card-body {
+            padding: 25px;
+            text-align: center;
+        }
+
+        .card-title {
+            font-size: 1.6rem;
+            color: #333;
+            margin-bottom: 10px;
+        }
+
+        .card-text {
+            color: #666;
+            font-size: 1rem;
+            margin-bottom: 20px;
+        }
+
+        .btn-option {
+            width: 100%;
+            padding: 12px;
+            border-radius: 30px;
+            font-size: 1.05rem;
+            font-weight: 600;
+            transition: all 0.3s;
+        }
+
+        .btn-stock {
+            background-color: #00c851;
+            border-color: #00c851;
+        }
+
+        .btn-stock:hover {
+            background-color: #00b046;
+            border-color: #00b046;
+        }
+
+        .btn-chat {
+            background-color: #ff4444;
+            border-color: #ff4444;
+        }
+
+        .btn-chat:hover {
+            background-color: #e60000;
+            border-color: #e60000;
+        }
+
+        .user-greeting {
+            position: absolute;
+            top: 20px;
+            right: 20px;
+            color: white;
+            display: flex;
+            align-items: center;
+        }
+
+        .user-greeting span {
+            margin-right: 10px;
+        }
+
+        .logout-btn {
+            background-color: rgba(255, 255, 255, 0.2);
+            color: white;
+            border: none;
+            border-radius: 20px;
+            padding: 5px 15px;
+            transition: all 0.3s;
+            cursor: pointer;
+            text-decoration: none;
+        }
+
+        .logout-btn:hover {
+            background-color: rgba(255, 255, 255, 0.3);
+        }
+
+        @media (max-width: 768px) {
+            .card-row {
+                flex-direction: column;
+                align-items: center;
+            }
+        }
+    </style>
+</head>
+
+<body>
+    <div class="user-greeting">
+        <span>Welcome, <strong id="username">User</strong>!</span>
+        <button class="logout-btn">
+            <i class="fas fa-sign-out-alt mr-1"></i> Logout
+        </button>
+    </div>
+
+    <div class="dashboard-container">
+        <div class="header">
+            <h1><i class="fas fa-robot mr-2"></i>FINBOT Dashboard</h1>
+            <p>Manage your investments and get AI-powered financial insights</p>
+        </div>
+
+        <div class="card-row">
+            <div class="card-option" onclick="window.location.href='/stock.html'">
+                <div class="card-header stock-header">
+                    <i class="fas fa-chart-line card-icon"></i>
+                </div>
+                <div class="card-body">
+                    <h3 class="card-title">Stock Prices</h3>
+                    <p class="card-text">Get real-time stock prices and market data for your investments.</p>
+                    <a href="/stock.html" class="btn btn-option btn-stock">
+                        <i class="fas fa-search-dollar mr-2"></i>Check Stocks
+                    </a>
+                </div>
+            </div>
+
+            <div class="card-option" onclick="window.location.href='/chat.html'">
+                <div class="card-header chat-header">
+                    <i class="fas fa-comments card-icon"></i>
+                </div>
+                <div class="card-body">
+                    <h3 class="card-title">AI Assistant</h3>
+                    <p class="card-text">Chat with FINBOT for financial guidance and investment advice.</p>
+                    <a href="/chat.html" class="btn btn-option btn-chat">
+                        <i class="fas fa-robot mr-2"></i>Start Chat
+                    </a>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', function () {
+            const storedUser = localStorage.getItem('finbotUser');
+            if (storedUser) {
+                document.getElementById('username').textContent = storedUser;
+            }
+
+            // Logout functionality
+            document.querySelector('.logout-btn').addEventListener('click', function () {
+                localStorage.removeItem('finbotUser');
+                window.location.href = '/login.html';
+            });
+        });
+    </script>
+</body>
+
+</html>

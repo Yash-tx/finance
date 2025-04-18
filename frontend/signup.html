@@ -1,0 +1,266 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>FINBOT - Sign Up</title>
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+    <link rel="stylesheet" href="/static/css/style.css">
+    <style>
+        .signup-container {
+            max-width: 500px;
+            margin: 100px auto;
+            padding: 20px;
+            border-radius: 10px;
+            box-shadow: 0 0 20px rgba(0, 0, 0, 0.1);
+            background-color: white;
+        }
+        .signup-header {
+            text-align: center;
+            margin-bottom: 30px;
+        }
+        .signup-header i {
+            font-size: 48px;
+            color: #007bff;
+        }
+        .form-group {
+            margin-bottom: 20px;
+        }
+        .btn-signup {
+            width: 100%;
+            padding: 12px;
+            font-size: 16px;
+        }
+        .login-link {
+            text-align: center;
+            margin-top: 20px;
+        }
+        body {
+            background: linear-gradient(135deg, #0062cc, #0096ff);
+            min-height: 100vh;
+        }
+        .alert {
+            display: none;
+            margin-bottom: 20px;
+        }
+        .password-requirements {
+            font-size: 0.8rem;
+            color: #6c757d;
+            margin-top: 5px;
+        }
+        .requirements-list {
+            margin-top: 5px;
+            padding-left: 20px;
+            font-size: 0.8rem;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="signup-container">
+            <div class="signup-header">
+                <i class="fas fa-robot mb-4"></i>
+                <h2>Join FINBOT</h2>
+                <p class="text-muted">Create your AI-Powered Financial Assistant account</p>
+            </div>
+            
+            <div class="alert alert-danger" id="errorAlert" role="alert">
+                Unable to create account. Please check your information and try again.
+            </div>
+            
+            <div class="alert alert-success" id="successAlert" role="alert">
+                Account created successfully! Redirecting to login...
+            </div>
+            
+            <form id="signupForm">
+                <div class="form-group">
+                    <div class="input-group">
+                        <div class="input-group-prepend">
+                            <span class="input-group-text">
+                                <i class="fas fa-user"></i>
+                            </span>
+                        </div>
+                        <input type="text" class="form-control" id="fullName" placeholder="Full Name" required>
+                    </div>
+                </div>
+                
+                <div class="form-group">
+                    <div class="input-group">
+                        <div class="input-group-prepend">
+                            <span class="input-group-text">
+                                <i class="fas fa-envelope"></i>
+                            </span>
+                        </div>
+                        <input type="email" class="form-control" id="email" placeholder="Email address" required>
+                    </div>
+                </div>
+                
+                <div class="form-group">
+                    <div class="input-group">
+                        <div class="input-group-prepend">
+                            <span class="input-group-text">
+                                <i class="fas fa-lock"></i>
+                            </span>
+                        </div>
+                        <input type="password" class="form-control" id="password" placeholder="Password" required>
+                    </div>
+                    <div class="password-requirements">
+                        Password must contain:
+                        <ul class="requirements-list">
+                            <li>At least 8 characters</li>
+                            <li>At least one uppercase letter</li>
+                            <li>At least one number</li>
+                            <li>At least one special character</li>
+                        </ul>
+                    </div>
+                </div>
+                
+                <div class="form-group">
+                    <div class="input-group">
+                        <div class="input-group-prepend">
+                            <span class="input-group-text">
+                                <i class="fas fa-lock"></i>
+                            </span>
+                        </div>
+                        <input type="password" class="form-control" id="confirmPassword" placeholder="Confirm Password" required>
+                    </div>
+                </div>
+                
+                <div class="form-group">
+                    <div class="custom-control custom-checkbox">
+                        <input type="checkbox" class="custom-control-input" id="termsAgree" required>
+                        <label class="custom-control-label" for="termsAgree">
+                            I agree to the <a href="#">Terms of Service</a> and <a href="#">Privacy Policy</a>
+                        </label>
+                    </div>
+                </div>
+                
+                <button type="submit" class="btn btn-primary btn-signup" id="signupButton">
+                    <i class="fas fa-user-plus mr-2"></i>Create Account
+                </button>
+            </form>
+            
+            <div class="login-link">
+                <p>Already have an account? <a href="/login.html">Log in</a></p>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        document.getElementById('signupForm').addEventListener('submit', function(e) {
+            e.preventDefault();
+            const fullName = document.getElementById('fullName').value;
+            const email = document.getElementById('email').value;
+            const password = document.getElementById('password').value;
+            const confirmPassword = document.getElementById('confirmPassword').value;
+            const button = document.getElementById('signupButton');
+            const errorAlert = document.getElementById('errorAlert');
+            const successAlert = document.getElementById('successAlert');
+            
+            // Disable button and show loading state
+            button.disabled = true;
+            button.innerHTML = '<i class="fas fa-spinner fa-spin mr-2"></i>Creating account...';
+            
+            // Hide previous alerts
+            errorAlert.style.display = 'none';
+            successAlert.style.display = 'none';
+            
+            // Check if passwords match
+            if (password !== confirmPassword) {
+                errorAlert.textContent = "Passwords do not match.";
+                errorAlert.style.display = 'block';
+                button.disabled = false;
+                button.innerHTML = '<i class="fas fa-user-plus mr-2"></i>Create Account';
+                return;
+            }
+            
+            // Validate password
+            const passwordRegex = /^(?=.*[A-Z])(?=.*\d)(?=.*[@$!%*?&])[A-Za-z\d@$!%*?&]{8,}$/;
+            if (!passwordRegex.test(password)) {
+                errorAlert.textContent = "Password does not meet requirements.";
+                errorAlert.style.display = 'block';
+                button.disabled = false;
+                button.innerHTML = '<i class="fas fa-user-plus mr-2"></i>Create Account';
+                return;
+            }
+            
+           // Send data to Flask backend
+fetch('/signup', {
+    method: 'POST',
+    headers: {
+        'Content-Type': 'application/json'
+    },
+    body: JSON.stringify({
+        full_name: fullName,
+        email: email,
+        password: password
+    })
+})
+.then(response => response.json())
+.then(data => {
+    if (data.status === 'success') {
+        successAlert.style.display = 'block';
+        // Redirect to login after 2s
+        setTimeout(() => {
+            window.location.href = '/login.html';
+        }, 2000);
+    } else {
+        errorAlert.textContent = data.message || "An error occurred during signup.";
+        errorAlert.style.display = 'block';
+        button.disabled = false;
+        button.innerHTML = '<i class="fas fa-user-plus mr-2"></i>Create Account';
+    }
+})
+.catch(error => {
+    console.error('Signup error:', error);
+    errorAlert.textContent = "Something went wrong. Please try again.";
+    errorAlert.style.display = 'block';
+    button.disabled = false;
+    button.innerHTML = '<i class="fas fa-user-plus mr-2"></i>Create Account';
+});
+
+        // Password validation visual feedback
+        document.getElementById('password').addEventListener('input', function() {
+            const password = this.value;
+            const requirements = document.querySelectorAll('.requirements-list li');
+            
+            // Check each requirement
+            if (password.length >= 8) {
+                requirements[0].style.color = 'green';
+            } else {
+                requirements[0].style.color = '';
+            }
+            
+            if (/[A-Z]/.test(password)) {
+                requirements[1].style.color = 'green';
+            } else {
+                requirements[1].style.color = '';
+            }
+            
+            if (/\d/.test(password)) {
+                requirements[2].style.color = 'green';
+            } else {
+                requirements[2].style.color = '';
+            }
+            
+            if (/[@$!%*?&]/.test(password)) {
+                requirements[3].style.color = 'green';
+            } else {
+                requirements[3].style.color = '';
+            }
+        });
+        
+        // Clear error when user types
+        document.getElementById('fullName').addEventListener('input', function() {
+            document.getElementById('errorAlert').style.display = 'none';
+        });
+        document.getElementById('email').addEventListener('input', function() {
+            document.getElementById('errorAlert').style.display = 'none';
+        });
+        document.getElementById('confirmPassword').addEventListener('input', function() {
+            document.getElementById('errorAlert').style.display = 'none';
+        });
+    </script>
+</body>
+</html>

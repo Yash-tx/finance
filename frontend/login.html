@@ -1,0 +1,141 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>FINBOT - Login</title>
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+    <link rel="stylesheet" href="/static/css/style.css">
+    <style>
+        .login-container {
+            max-width: 400px;
+            margin: 100px auto;
+            padding: 20px;
+            border-radius: 10px;
+            box-shadow: 0 0 20px rgba(0, 0, 0, 0.1);
+            background-color: white;
+        }
+        .login-header {
+            text-align: center;
+            margin-bottom: 30px;
+        }
+        .login-header i {
+            font-size: 48px;
+            color: #007bff;
+        }
+        .form-group {
+            margin-bottom: 20px;
+        }
+        .btn-login {
+            width: 100%;
+            padding: 12px;
+            font-size: 16px;
+        }
+        .signup-link {
+            text-align: center;
+            margin-top: 20px;
+        }
+        body {
+            background: linear-gradient(135deg, #0062cc, #0096ff);
+            min-height: 100vh;
+        }
+        .alert {
+            display: none;
+            margin-bottom: 20px;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="login-container">
+            <div class="login-header">
+                <i class="fas fa-robot mb-4"></i>
+                <h2>Welcome to FINBOT</h2>
+                <p class="text-muted">Your AI-Powered Financial Assistant</p>
+            </div>
+            
+            <div class="alert alert-danger" id="errorAlert" role="alert">
+                Invalid email or password. Please try again.
+            </div>
+            
+            <form id="loginForm">
+                <div class="form-group">
+                    <div class="input-group">
+                        <div class="input-group-prepend">
+                            <span class="input-group-text">
+                                <i class="fas fa-envelope"></i>
+                            </span>
+                        </div>
+                        <input type="email" class="form-control" id="email" placeholder="Email address" required>
+                    </div>
+                </div>
+                
+                <div class="form-group">
+                    <div class="input-group">
+                        <div class="input-group-prepend">
+                            <span class="input-group-text">
+                                <i class="fas fa-lock"></i>
+                            </span>
+                        </div>
+                        <input type="password" class="form-control" id="password" placeholder="Password" required>
+                    </div>
+                </div>
+                
+                <div class="form-group">
+                    <div class="custom-control custom-checkbox">
+                        <input type="checkbox" class="custom-control-input" id="rememberMe">
+                        <label class="custom-control-label" for="rememberMe">Remember me</label>
+                        <a href="#" class="float-right">Forgot password?</a>
+                    </div>
+                </div>
+                
+                <button type="submit" class="btn btn-primary btn-login" id="loginButton">
+                    <i class="fas fa-sign-in-alt mr-2"></i>Login
+                </button>
+            </form>
+            
+            <div class="signup-link">
+                <p>Don't have an account? <a href="#">Sign up</a></p>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        document.getElementById('loginForm').addEventListener('submit', function(e) {
+            e.preventDefault();
+            const email = document.getElementById('email').value;
+            const password = document.getElementById('password').value;
+            const button = document.getElementById('loginButton');
+            const errorAlert = document.getElementById('errorAlert');
+            
+            // Disable button and show loading state
+            button.disabled = true;
+            button.innerHTML = '<i class="fas fa-spinner fa-spin mr-2"></i>Logging in...';
+            
+            // Simple validation (demo purposes)
+            if (email === 'demo@finbot.com' && password === 'demo123') {
+                // Success - redirect to dashboard
+                setTimeout(() => {
+                    window.location.href = '/dashboard.html';
+                }, 1000);
+            } else {
+                // Show error
+                setTimeout(() => {
+                    errorAlert.style.display = 'block';
+                    button.disabled = false;
+                    button.innerHTML = '<i class="fas fa-sign-in-alt mr-2"></i>Login';
+                }, 1000);
+            }
+        });
+
+        // Hide error alert when user starts typing
+        document.getElementById('email').addEventListener('input', function() {
+            document.getElementById('errorAlert').style.display = 'none';
+        });
+        document.getElementById('password').addEventListener('input', function() {
+            document.getElementById('errorAlert').style.display = 'none';
+        });
+    </script>
+</body>
+</html>
